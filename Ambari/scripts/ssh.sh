@@ -23,12 +23,18 @@ chmod +x $PSWD_TMP
 > $FAILED_LIST_TMP
 
 # 获取服务器列表
-LIST_INPUT=$(cat $LIST_INPUT | grep -v '#')
-LINE=$(echo "$LIST_INPUT" | wc -l)
+LIST_INPUT_CONTENT=$(cat $LIST_INPUT | grep -v '#')
+LINE=$(echo "$LIST_INPUT_CONTENT" | wc -l)
+if [ -z "$LIST_INPUT_CONTENT" ]
+then
+  echo "IP LIST: $LIST_INPUT is empty"
+  exit
+fi
+
 i=1
 while [ $i -le $LINE ]
 do
-  HOSTINFO=$(echo "$LIST_INPUT" | awk 'NR=='$i'{print $0}')
+  HOSTINFO=$(echo "$LIST_INPUT_CONTENT" | awk 'NR=='$i'{print $0}')
   IP=$(echo $HOSTINFO | awk '{print $1}')
   PASSWORD=$(echo $HOSTINFO | awk '{print $3}')
   ((i++))
