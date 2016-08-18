@@ -1,0 +1,39 @@
+# public
+WORK_DIR=${WORK_DIR:-$SCRIPT_DIR/..}
+CONF_DIR=${CONF_DIR:-$WORK_DIR/conf}
+DATA_DIR=${DATA_DIR:-$WORK_DIR/data}
+INPUT_DIR=${INPUT_DIR:-$WORK_DIR/input}
+TMP_DIR=${TMP_DIR:-$WORK_DIR/tmp}
+
+# ssh.sh
+FAILED_LIST_TMP=${FAILED_LIST_TMP:-$TMP_DIR/failed_list}
+PSWD_TMP=${PSWD_TMP:-$TMP_DIR/pswd}
+LIST_INPUT=${LIST_INPUT:-$INPUT_DIR/list}
+
+# init_host.sh
+SEC1970=$(date +%s)
+
+HOSTS_INPUT=${INPUT_DIR}/hosts
+NEW_LIST_INPUT=${NEW_LIST_INPUT:-$INPUT_DIR/new_list}
+ALL_LIST_INPUT=${ALL_LIST_INPUT:-$INPUT_DIR/all_list}
+
+HOME=${HOME:-/root}
+SSH_KEY_DIR="$HOME/.ssh"
+PRI_KEY_FILENAME='id_rsa'
+PUB_KEY_FILENAME='id_rsa.pub'
+PRI_KEY_FILE="$SSH_KEY_DIR/$PRI_KEY_FILENAME"
+PUB_KEY_FILE="$SSH_KEY_DIR/$PUB_KEY_FILENAME"
+
+SSH_SH=$SCRIPT_DIR/ssh.sh
+SERVER_IP=''
+COMMAND=''
+
+# api
+EXCLUDED_HOSTS_INPUT=${EXCLUDED_HOSTS_INPUT:-$INPUT_DIR/excluded_hosts}
+
+AMBARI_USER=''                # admin
+AMBARI_PASSWD=''              # admin
+AMBARI_SERVER=''              # rsync.landrover004.hadoop.sjs.ted
+AMBARI_PORT=''                # 8080
+AMBARI_CLUSTER=''             # LandRover
+AMBARI_REQUESTS="http://$AMBARI_SERVER:$AMBARI_PORT/api/v1/clusters/$AMBARI_CLUSTER/requests"
