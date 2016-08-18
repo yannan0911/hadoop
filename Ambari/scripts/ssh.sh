@@ -1,6 +1,14 @@
 #!/bin/sh
 SCRIPT_DIR=${SCRIPT_DIR:-`pwd`}
-. ../conf/ssh_conf
+if [ "$#" -eq 0 -o "$#" -gt 2 ]
+then
+  echo 'Invalid parameter number'
+  exit
+elif [ "$#" -eq 2 -a -f "$2" ]
+then
+  LIST_INPUT="$2"
+fi
+. ../conf/conf
 
 # 判断是否有 INPUT 列表问题件
 if [ ! -f $LIST_INPUT ]
@@ -47,7 +55,7 @@ echo '$PASSWORD'
 EOF
 
   # 执行远程命令
-  echo "$*"|setsid env SSH_ASKPASS=$PSWD_TMP DISPLAY='none:0' ssh -T root@$IP -o NumberOfPasswordPrompts=1 -o ConnectTimeout=3 2>&1
+  echo "$1"|setsid env SSH_ASKPASS=$PSWD_TMP DISPLAY='none:0' ssh -T root@$IP -o NumberOfPasswordPrompts=1 -o ConnectTimeout=3 2>&1
   if [ $? -ne 0 ]
   then
     echo $IP >> $FAILED_LIST_TMP

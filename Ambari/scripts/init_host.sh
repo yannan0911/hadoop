@@ -1,6 +1,6 @@
 #!/bin/sh
 SCRIPT_DIR=${SCRIPT_DIR:-`pwd`}
-. ../conf/init_host_conf
+. ../conf/conf
 SERVER_IP=$(ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp')
 
 # 仅当 key 不存在时创建新 key
@@ -32,12 +32,9 @@ COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILEN
          HOST_NAME=\$(awk '/'\$HOST_IP'/{print \$2}' /etc/hosts);
          sed -i '/HOSTNAME/s/.*/HOSTNAME='\$HOST_NAME'/g' /etc/sysconfig/network;
          hostname \$HOST_NAME;"
-. $SSH_SH $COMMAND
+. $SSH_SH "$COMMAND" $NEW_LIST_INPUT
 
 # 所有节点: 更新 /etc/hosts 文件;
-mv $LIST_INPUT{,.bak}
-cp $HOSTS_INPUT $LIST_INPUT
 COMMAND="mv /etc/hosts{,.$SEC1970};
          rsync -a $SERVER_IP::root$HOSTS_INPUT /etc/hosts;"
-. $SSH_SH $COMMAND
-\mv $LIST_INPUT{.bak,}
+. $SSH_SH "$COMMAND" $ALL_LIST_INPUT 
