@@ -19,6 +19,9 @@ then
   exit
 fi
 
+# 制作 kerberos keytabs
+. $MK_KEYS_SH
+
 # 新节点: 1.建立信任关系; 2.更新 /etc/hosts 文件; 3.更改主机名;
 #        4.添加 Hadoop 用户,拷贝 kerberos 配置文件及 keytabs;
 #        5.SOGO 定制,磁盘软链制作;

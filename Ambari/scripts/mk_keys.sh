@@ -119,10 +119,10 @@ create_key()
   chown hdfs:hadoop $HOST_KEY_OUTPUT_DIR/jn.service.keytab
   chmod 400 $HOST_KEY_OUTPUT_DIR/jn.service.keytab
 
-  cp $HBASE_COM_KEY_FILE $HDFS_COM_KEY_FILE $SMOKEUSER_COM_KEY_FILE $AMBARI_COM_KEY_FILE $HOST_KEY_OUTPUT_DIR
+  cp -a $HBASE_COM_KEY_FILE $HDFS_COM_KEY_FILE $SMOKEUSER_COM_KEY_FILE $AMBARI_COM_KEY_FILE $HOST_KEY_OUTPUT_DIR
 }
 
-for i in $(awk '{print $2}' $NEW_LIST_INPUT)
+for i in $(grep -v '#' $NEW_LIST_INPUT | awk '{print $2}' )
 do
   create_key $i
 done
