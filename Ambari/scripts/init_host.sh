@@ -63,7 +63,7 @@ COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILEN
          ln -s /search/ted/hadoop-envir/yarn /search/work/hadoop-envir/yarn;
 
          rsync -a $SERVER_IP::root/$USERADD_INPUT /tmp/$USERADD_FILENAME.$SERVER_IP;
-         for user in \$(cat /tmp/$USERADD_FILENAME.$SERVER_IP);do useradd \$user;done;
+         for user in \$(grep -v '#' /tmp/$USERADD_FILENAME.$SERVER_IP);do useradd \$user;done;
          rm -f /tmp/$USERADD_FILENAME.$SERVER_IP"
 . $SSH_SH "$COMMAND" $NEW_LIST_INPUT
 
