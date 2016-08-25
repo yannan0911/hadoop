@@ -24,7 +24,9 @@ fi
 
 # 新节点: 1.建立信任关系; 2.更新 /etc/hosts 文件; 3.更改主机名;
 #        4.添加 Hadoop 用户,拷贝 kerberos 配置文件及 keytabs;
-#        5.SOGO 定制,磁盘软链制作;
+#        5.拷贝 jdk;
+#        SOGO 定制:
+#        6.磁盘软链制作; 7.添加各组身份用户,如 adrs.
 COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILENAME.$SERVER_IP;
          cp /root/.ssh/authorized_keys{,.$SEC1970};
          sort /tmp/$PUB_KEY_FILENAME.$SERVER_IP /root/.ssh/authorized_keys.$SEC1970 | uniq > /root/.ssh/authorized_keys;
@@ -39,6 +41,7 @@ COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILEN
          hostname \$HOST_NAME;
 
          groupadd hadoop;
+         useradd work;
          useradd ambari-qa -g hadoop;
          useradd falcon -g hadoop;
          useradd hbase -g hadoop;
@@ -47,17 +50,21 @@ COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILEN
          useradd mapred -g hadoop;
          useradd nagios -g hadoop;
          useradd oozie -g hadoop;
-         useradd root -g hadoop;
-         useradd work -g hadoop;
          useradd yarn -g hadoop;
          useradd zookeeper -g hadoop;
          mkdir -p /etc/security/keytabs;
          rsync -a $SERVER_IP::root/$KEY_OUTPUT_DIR/\$HOST_NAME/*.keytab /etc/security/keytabs/;
          rsync -a $SERVER_IP::root/etc/krb5.conf /etc/krb5.conf;
 
+         rsync -a $SERVER_IP::root/$JDK_DIR/* /$JDK_DIR/
+
          mkdir -p /search/ted/hadoop-envir/{var,yarn};
          ln -s /search/ted/hadoop-envir/var /search/work/hadoop-envir/var;
-         ln -s /search/ted/hadoop-envir/yarn /search/work/hadoop-envir/yarn;"
+         ln -s /search/ted/hadoop-envir/yarn /search/work/hadoop-envir/yarn;
+
+         rsync -a $SERVER_IP::root/$USERADD_INPUT /tmp/$USERADD_FILENAME.$SERVER_IP;
+         for user in \$(cat /tmp/$USERADD_FILENAME.$SERVER_IP);do useradd \$user;done;
+         rm -f /tmp/$USERADD_FILENAME.$SERVER_IP"
 . $SSH_SH "$COMMAND" $NEW_LIST_INPUT
 
 # 所有节点: 更新 /etc/hosts 文件;
