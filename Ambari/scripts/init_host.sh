@@ -1,5 +1,5 @@
 #!/bin/sh
-SCRIPT_DIR=${SCRIPT_DIR:-`pwd`}
+SCRIPTS_DIR=${SCRIPTS_DIR:-`pwd`}
 . ../conf/conf
 SERVER_IP=$(ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp')
 

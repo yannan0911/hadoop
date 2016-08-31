@@ -1,5 +1,5 @@
 #!/bin/sh
-SCRIPT_DIR=${SCRIPT_DIR:-`pwd`}
+SCRIPTS_DIR=${SCRIPTS_DIR:-`pwd`}
 if [ "$#" -eq 0 -o "$#" -gt 2 ]
 then
   echo 'Invalid parameter number'
