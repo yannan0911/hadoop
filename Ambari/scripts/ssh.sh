@@ -44,7 +44,7 @@ while [ $i -le $LINE ]
 do
   HOSTINFO=$(echo "$LIST_INPUT_CONTENT" | awk 'NR=='$i'{print $0}')
   IP=$(echo $HOSTINFO | awk '{print $1}')
-  PASSWORD=$(echo $HOSTINFO | awk '{print $3}')
+  PASSWORD=$(echo $HOSTINFO | awk '{print $NF}')
   ((i++))
   echo -e "$IP"
 
