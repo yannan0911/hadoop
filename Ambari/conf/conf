@@ -1,11 +1,16 @@
 # public
 WORK_DIR=${WORK_DIR:-$SCRIPTS_DIR/..}
 SCRIPTS_DIR=${SCRIPTS_DIR:-$WORK_DIR/scripts}
+SCRIPTS_FLOW_DIR=${SCRIPTS_FLOW_DIR:-$WORK_DIR/scripts/flow}
 CONF_DIR=${CONF_DIR:-$WORK_DIR/conf}
 DATA_DIR=${DATA_DIR:-$WORK_DIR/data}
 INPUT_DIR=${INPUT_DIR:-$WORK_DIR/input}
 OUTPUT_DIR=${OUTPUT_DIR:-$WORK_DIR/output}
 TMP_DIR=${TMP_DIR:-$WORK_DIR/tmp}
+TMP_FLOW_DIR=${TMP_FLOW_DIR:-$TMP_DIR/flow}
+LOG_DIR=${LOG_DIR:-$WORK_DIR/logs}
+
+mkdir -p $DATA_DIR $INPUT_DIR $OUTPUT_DIR $TMP_FLOW_DIR $LOG_DIR
 
 # ssh.sh
 FAILED_LIST_TMP=${FAILED_LIST_TMP:-$TMP_DIR/failed_list}
@@ -40,7 +45,7 @@ DEFAULT_REALM="@EXAMPLE.COM"
 KEY_OUTPUT_DIR=$OUTPUT_DIR/keys
 COM_KEY_OUTPUT_DIR=$KEY_OUTPUT_DIR/com
 
-# api
+## api
 EXCLUDED_HOSTS_INPUT=${EXCLUDED_HOSTS_INPUT:-$INPUT_DIR/excluded_hosts}
 
 AMBARI_USER=${AMBARI_USER:-admin}
@@ -51,3 +56,12 @@ AMBARI_PORT=${AMBARI_PORT:-8080}
 AMBARI_CLUSTER=${AMBARI_CLUSTER:-cluster_name}    # LandRover          
 AMBARI_API="http://$AMBARI_SERVER:$AMBARI_PORT/api/v1/clusters/$AMBARI_CLUSTER"
 AMBARI_REQUESTS="$AMBARI_API/requests"
+
+## flow                     # 0.19 or 2.0
+HDFS=${HDFS:-hdfs}          # /search/work/hadoop-envir/hadoop-namenode/bin/hadoop or hdfs
+MR=${MR:-yarn}              # /search/work/hadoop-envir/hadoop-jobtracker/bin/hadoop or yarn
+
+# check_dead_dn.sh
+THRESHOLD_SECOND=${THRESHOLD_SECOND:-600}                               # datanode dead second threshold value
+DFSADMIN_REPORT_TMP=${DFSADMIN_REPORT_TMP:-$TMP_DIR/dfsadmin_report}
+DEAD_DN_LIST_TMP=${DEAD_DN_LIST_TMPFILE:-$TMP_FLOW_DIR/dead_dn_list}
