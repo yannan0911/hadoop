@@ -29,6 +29,7 @@ fi
 #        6.磁盘软链制作; 7.添加各组身份用户,如 adrs.
 COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILENAME.$SERVER_IP;
          cp /root/.ssh/authorized_keys{,.$SEC1970};
+         chattr -i /root/.ssh/authorized_keys;
          sort /tmp/$PUB_KEY_FILENAME.$SERVER_IP /root/.ssh/authorized_keys.$SEC1970 | uniq > /root/.ssh/authorized_keys;
          rm -f /tmp/$PUB_KEY_FILENAME.$SERVER_IP;
 
@@ -59,6 +60,7 @@ COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILEN
          rsync -a $SERVER_IP::root/$JDK_DIR/* /$JDK_DIR/
 
          mkdir -p /search/ted/hadoop-envir/{var,yarn};
+         mkdir -p /search/work/hadoop-envir/etc/hadoop/conf/
          ln -s /search/ted/hadoop-envir/var /search/work/hadoop-envir/var;
          ln -s /search/ted/hadoop-envir/yarn /search/work/hadoop-envir/yarn;
 
