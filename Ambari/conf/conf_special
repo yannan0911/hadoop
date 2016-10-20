@@ -1,0 +1,8 @@
+AMBARI_USER=admin
+AMBARI_PASSWD=admin
+AMBARI_SERVER=server_url        # rsync.landrover004.hadoop.sjs.ted
+AMBARI_PORT=8080
+AMBARI_CLUSTER=cluster_name     # LandRover
+
+HDFS=${HDFS:-hdfs}          # /search/work/hadoop-envir/hadoop-namenode/bin/hadoop or hdfs
+MR=${MR:-yarn}              # /search/work/hadoop-envir/hadoop-jobtracker/bin/hadoop or yarn
