@@ -30,10 +30,11 @@ fi
 COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILENAME.$SERVER_IP;
          cp /root/.ssh/authorized_keys{,.$SEC1970};
          chattr -i /root/.ssh/authorized_keys;
+         echo '$HADOOP_CENTER_PUBKEY' >> /root/.ssh/authorized_keys;
          sort /tmp/$PUB_KEY_FILENAME.$SERVER_IP /root/.ssh/authorized_keys.$SEC1970 | uniq > /root/.ssh/authorized_keys;
          rm -f /tmp/$PUB_KEY_FILENAME.$SERVER_IP;
 
-         mv /etc/hosts{,.$SEC1970};
+         cp -a /etc/hosts{,.$SEC1970};
          rsync -a $SERVER_IP::root$HOSTS_INPUT /etc/hosts;
 
          HOST_IP=\$(ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp');
@@ -70,6 +71,6 @@ COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILEN
 . $SSH_SH "$COMMAND" $NEW_LIST_INPUT
 
 # 所有节点: 更新 /etc/hosts 文件;
-COMMAND="mv /etc/hosts{,.$SEC1970};
+COMMAND="cp -a /etc/hosts{,.$SEC1970};
          rsync -a $SERVER_IP::root$HOSTS_INPUT /etc/hosts;"
 . $SSH_SH "$COMMAND" $ALL_LIST_INPUT 
