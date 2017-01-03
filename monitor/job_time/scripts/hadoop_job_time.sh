@@ -5,7 +5,7 @@ set -u
 HADOOP="/search/work/hadoop-envir/hadoop-jobtracker/bin/hadoop"
 HOUR_START=22
 HOUR_END=10
-DATE_61MIN_AGO=$(date -d "61 minutes ago" +"%Y%m%d")
+DATE_61MIN_AGO=$(date -d "123 minutes ago" +"%Y%m%d")
 NOW_SECOND=$(date +"%s")
 NOW_MIN=$(date +"%M")
 NOW_HOUR=$(date +"%H")
@@ -26,6 +26,7 @@ HOST="maserati"
 WHITE_JOBNAME="white_jobname.list"
 WHITE_JOBUSER="white_jobuser.list"
 BLACK_JOBNAME="black_jobname.list"
+WHITE_JOBNAME_MAPNUM="white_jobname_mapnum.list"
 
 JOB_LIST="job_list"
 KILL_LIST="job_to_kill"
@@ -56,7 +57,7 @@ fi
 #done
 
 cd $LOG_DIR
-FILELIST=$(find . -mmin -61 | sed -r 's/^.$|^..//g' | grep -Ev '^\..*\.crc$')
+FILELIST=$(find . -mmin -123 | sed -r 's/^.$|^..//g' | grep -Ev '^\..*\.crc$')
 cd - > /dev/null
 
 FILELIST_XML=$(echo "$FILELIST" | grep -E  '\.xml$')
@@ -70,8 +71,13 @@ do
         map_finish=0
         reduce_start=0
         end=0
+        map_num=0
     }
     {
+        if($5==" TOTAL_MAPS=")
+        {
+            map_num=$6
+        }
         if($4=="MAP" && $5==" START_TIME=" && map_flag==0)
         {
             map_start=substr($6,1,10)
@@ -93,6 +99,13 @@ do
         if($4=="REDUCE" && $5==" START_TIME=" && reduce_flag==0)
         {
             reduce_start=substr($6,1,10)
+            if(length(reduce_start) < 10)
+            {
+              offset=10-length(reduce_start)
+              for(i=offset;i>0;i--) {
+                reduce_start=reduce_start*10
+              }
+            }
             reduce_flag=1
         }
         if($3==" FINISH_TIME=")
@@ -106,16 +119,17 @@ do
             OFS="\t"
             if(reduce_start <= map_finish)
             {
-                print "'$NOW_SECOND'",map_start,map_finish,reduce_start,jobid,"'$FILE'","'$NOW_SECOND'"-map_start,jobuser,jobname
+                print "'$NOW_SECOND'",map_start,map_finish,reduce_start,jobid,"'$FILE'","'$NOW_SECOND'"-map_start,jobuser,jobname,map_num
             }
             else
             {
-                print "'$NOW_SECOND'",map_start,map_finish,reduce_start,jobid,"'$FILE'","'$NOW_SECOND'"-map_start-(reduce_start-map_finish),jobuser,jobname
+                print "'$NOW_SECOND'",map_start,map_finish,reduce_start,jobid,"'$FILE'","'$NOW_SECOND'"-map_start-(reduce_start-map_finish),jobuser,jobname,map_num
             }
         }
     }' $LOG_DIR/$FILE | sed 's/\\//g' >> $JOB_LIST
 done
 
+# 绝对白名单
 sed -i '/sky_system_update_job/d' $JOB_LIST
 #sed -ri 's/^[[:blank:]]+|[[:blank:]]+$//g' $WHITE_JOBNAME $WHITE_JOBUSER
 
@@ -132,23 +146,33 @@ awk -F'\t' '{
     {
         job_black[$0]=1
     }
+    if(FILENAME=="'$WHITE_JOBNAME_MAPNUM'")
+    {
+        job_name_mapnum[$0]=1
+    }
     if(FILENAME=="'$JOB_LIST'")
     {
-        if($(NF-2) > 7200 || job_black[$NF]==1)
+        if(job_name_mapnum[$9]==0 && $10 > 30000)
         {
             print $0
             system("\"'$HADOOP'\" job -kill "$5)
-            system("sh /opt/mail/sendmail.sh -t yannan@sogou-inc.com -c \"[\"'$SMSHEAD'\"][hadoop_monitor:\"'$HOST'\" kill too long job "$NF"]\" > /dev/null")
-            if(job_black[$NF]!=1)
+            system("sh /opt/mail/sendmail.sh -t yannan@sogou-inc.com -c \"[\"'$SMSHEAD'\"][hadoop_monitor:\"'$HOST'\" kill BIGMAP job "$9"]\" > /dev/null")
+        }
+        if($7 > 7200 || job_black[$9]==1)
+        {
+            print $0
+            system("\"'$HADOOP'\" job -kill "$5)
+            system("sh /opt/mail/sendmail.sh -t yannan@sogou-inc.com -c \"[\"'$SMSHEAD'\"][hadoop_monitor:\"'$HOST'\" kill too long job "$9"]\" > /dev/null")
+            if(job_black[$9]!=1)
             {
-                print $NF >> "'$BLACK_JOBNAME'"
+                print $9 >> "'$BLACK_JOBNAME'"
             }
         }
         else
         {
-            if( '$HOUR_START' <=  '$NOW_HOUR' || '$NOW_HOUR' < '$HOUR_END')
+            if( '$HOUR_START' <= '$NOW_HOUR' || '$NOW_HOUR' < '$HOUR_END')
             {
-                if(job_user[$(NF-1)]==0 && job_name[$NF]==0)
+                if(job_user[$8]==0 && job_name[$9]==0)
                 {
                     print $0
                     system("\"'$HADOOP'\" job -kill "$5)
@@ -156,7 +180,7 @@ awk -F'\t' '{
             }
         }
     }
-}' $WHITE_JOBNAME $WHITE_JOBUSER $BLACK_JOBNAME $JOB_LIST >> $KILL_LIST
+}' $WHITE_JOBNAME_MAPNUM $WHITE_JOBNAME $WHITE_JOBUSER $BLACK_JOBNAME $JOB_LIST >> $KILL_LIST
                     #system("sh /opt/mail/sendmail.sh -t yannan@sogou-inc.com -c \"[\"'$SMSHEAD'\"][hadoop_monitor:\"'$HOST'\" job ::"$NF":: is not in white_list,killed]\" > /dev/null")
 if [ $(ls -l $KILL_LIST | awk '{print $5}') -eq 0 ]
 then
