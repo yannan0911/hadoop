@@ -1,7 +1,7 @@
 #!/bin/sh
 SCRIPTS_DIR=${SCRIPTS_DIR:-`pwd`}
 . ../conf/conf
-SERVER_IP=$(ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp')
+SERVER_IP=$(ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp' | head -n 1)
 
 # 仅当 key 不存在时创建新 key
 if [ ! -f $PRI_KEY_FILE ]
@@ -21,7 +21,7 @@ fi
 
 # 制作 kerberos keytabs
 . $MK_KEYS_SH
-
+ 
 # 新节点: 1.建立信任关系; 2.更新 /etc/hosts 文件; 3.更改主机名;
 #        4.添加 Hadoop 用户,拷贝 kerberos 配置文件及 keytabs;
 #        5.拷贝 jdk;
@@ -54,20 +54,24 @@ COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILEN
          useradd oozie -g hadoop;
          useradd yarn -g hadoop;
          useradd zookeeper -g hadoop;
-         mkdir -p /etc/security/keytabs;
-         rsync -a $SERVER_IP::root/$KEY_OUTPUT_DIR/\$HOST_NAME/*.keytab /etc/security/keytabs/;
          rsync -a $SERVER_IP::root/etc/krb5.conf /etc/krb5.conf;
 
-         rsync -a $SERVER_IP::root/$JDK_DIR/* /$JDK_DIR/
+         rsync -a $SERVER_IP::root/$JDK_DIR/* /$JDK_DIR/;
 
          mkdir -p /search/ted/hadoop-envir/{var,yarn};
-         mkdir -p /search/work/hadoop-envir/etc/hadoop/conf/
+         mkdir -p /search/work/hadoop-envir/etc/hadoop/conf/;
          ln -s /search/ted/hadoop-envir/var /search/work/hadoop-envir/var;
          ln -s /search/ted/hadoop-envir/yarn /search/work/hadoop-envir/yarn;
 
          rsync -a $SERVER_IP::root/$USERADD_INPUT /tmp/$USERADD_FILENAME.$SERVER_IP;
          for user in \$(grep -v '#' /tmp/$USERADD_FILENAME.$SERVER_IP);do useradd \$user;done;
-         rm -f /tmp/$USERADD_FILENAME.$SERVER_IP"
+         rm -f /tmp/$USERADD_FILENAME.$SERVER_IP;
+         cp -a /etc/passwd{,.$SEC1970};
+         cp -a /etc/group{,.$SEC1970};
+         rsync -a $SERVER_IP::root/etc/passwd /etc/passwd;
+         rsync -a $SERVER_IP::root/etc/group /etc/group;
+         mkdir -p /etc/security/keytabs;
+         rsync -a $SERVER_IP::root/$KEY_OUTPUT_DIR/\$HOST_NAME/*.keytab /etc/security/keytabs/"
 . $SSH_SH "$COMMAND" $NEW_LIST_INPUT
 
 # 所有节点: 更新 /etc/hosts 文件;
