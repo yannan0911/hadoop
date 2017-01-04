@@ -61,3 +61,52 @@ AMBARI_REQUESTS="$AMBARI_API/requests"
 THRESHOLD_SECOND=${THRESHOLD_SECOND:-600}                               # datanode dead second threshold value
 DFSADMIN_REPORT_TMP=$TMP_DIR/dfsadmin_report
 DEAD_DN_LIST_TMP=$TMP_FLOW_DIR/dead_dn_list
+
+# backup_server
+BACKUP_TIME=$(date -d"0 days ago" +"%Y%m%d%H")
+DEL_DAY=$(date -d"2 days ago" +"%Y%m%d")
+BACKUP_SERVER_DATA_DIR=${BACKUP_SERVER_DATA_DIR:-$SCRIPT_FLOW_BACKUP_SERVER_DIR/backup_data}
+
+# check_edits
+EDITS_FILE_DIR=${EDITS_DIR:-/search/work/hadoop-envir/hadoop-data/dfs/name/current}
+EDITS_FILE_SIZE_THRESHOLD=209715200    # 200MB
+
+# hadoop_job_time
+JOB_TIME_THRESHOLD_TIMEOUT_MINUTES=120    #min
+JOB_TIME_THRESHOLD_OFFSET_MINUTES=$(($JOB_TIME_THRESHOLD_TIMEOUT_MINUTES+3))    #min
+JOB_TIME_THRESHOLD_OFFSET_SECOND=$((JOB_TIME_THRESHOLD_OFFSET_MINUTES*60))     #second
+JOB_TIME_THRESHOLD_MAPNUM=30000
+JOB_TIME_HOUR_START=22
+JOB_TIME_HOUR_END=10
+DATE_MIN_AGO_YMD=$(date -d "$JOB_TIME_THRESHOLD_OFFSET_MINUTES minutes ago" +"%Y%m%d")
+TIME_HMS=$(date +"%H%M%S")
+NOW_SECOND=$(date +"%s")
+NOW_MIN=$(date +"%M")
+NOW_HOUR=$(date +"%H")
+NOW_DATE=$(date +"%Y%m%d")
+NOW_YEAR=$(date +"%Y")
+NOW_MONTH=$(date +"%m")
+NOW_DAY=$(date +"%d")
+YEAR_30DAYS_AGO=$(date -d'30 days ago' +"%Y")
+MONTH_30DAYS_AGO=$(date -d'30 days ago' +"%m")
+DAY_30DAYS_AGO=$(date -d'30 days ago' +"%d")
+
+NOW_YMD_DIR=$NOW_YEAR/$NOW_MONTH/$NOW_DAY
+DEL_YMD_DIR=$YEAR_30DAYS_AGO/$MONTH_30DAYS_AGO/$DAY_30DAYS_AGO
+
+JOB_HISTORY_LOG_ROOT_DIR="$JOBTRACKER_DIR/logs/history"
+JOB_HISTORY_LOG_DIR="$JOB_HISTORY_LOG_ROOT_DIR/$DATE_MIN_AGO_YMD"
+
+RANDOM_NUM=$RANDOM
+
+WHITE_JOBNAME_LIST="white_jobname.list"
+WHITE_JOBUSER_LIST="white_jobuser.list"
+BLACK_JOBNAME_LIST="black_jobname.list"
+WHITE_JOBNAME_MAPNUM_LIST="white_jobname_mapnum.list"
+ALL_JOB_FILE="job_list"
+KILL_JOB_FILE="job_to_kill"
+ALL_JOB_LIST="logs/$NOW_YMD_DIR/$ALL_JOB_FILE.${NOW_DATE}_${TIME_HMS}.$RANDOM_NUM"
+KILL_JOB_LIST="logs/$NOW_YMD_DIR/$KILL_JOB_FILE.${NOW_DATE}_${TIME_HMS}.$RANDOM_NUM"
+
+## import func
+. $SCRIPTS_DIR/func.sh

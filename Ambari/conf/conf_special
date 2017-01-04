@@ -16,4 +16,4 @@ NAMENODE_DIR=${NAMENODE_DIR:-nn_dir}                  # /search/work/hadoop-envi
 HDFS=${HDFS:-hdfs}          # /search/work/hadoop-envir/hadoop-namenode/bin/hadoop or hdfs
 MR=${MR:-yarn}              # /search/work/hadoop-envir/hadoop-jobtracker/bin/hadoop or yarn
 
-MAIL=${MAIL:-sendmail}      # /opt/mail/sendmail.sh
+MAIL_TOOL=${MAIL_TOOL:-sendmail}      # /opt/mail/sendmail.sh
