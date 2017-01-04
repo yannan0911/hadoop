@@ -1,7 +1,7 @@
 #!/bin/sh
 SCRIPTS_DIR=${SCRIPTS_DIR:-`pwd`}
 . ../conf/conf
-SERVER_IP=$(ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp' | head -n 1)
+SERVER_IP=${SERVER_IP:-$(ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp' | head -n 1)}
 
 # 仅当 key 不存在时创建新 key
 if [ ! -f $PRI_KEY_FILE ]
