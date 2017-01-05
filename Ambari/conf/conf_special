@@ -9,9 +9,12 @@ AMBARI_SERVER=server_url        # rsync.landrover004.hadoop.sjs.ted
 AMBARI_PORT=8080
 AMBARI_CLUSTER=cluster_name     # LandRover
 
-HADOOP_WORK_DIR=${HADOOP_WORK_DIR:-work_dir}                        # /search/work/
+HADOOP_WORK_DIR=${HADOOP_WORK_DIR:-work_dir}                        # /search/work
+HADOOP_DATA_DIR=${HADOOP_DATA_DIR:-data_dir}                        # /search/work/hadoop-envir/hadoop-data
 JOBTRACKER_DIR=${JOBTRACKER_DIR:-jt_dir}              # /search/work/hadoop-envir/hadoop-jobtracker
 NAMENODE_DIR=${NAMENODE_DIR:-nn_dir}                  # /search/work/hadoop-envir/hadoop-namenode
+TASKTRACKER_DIR=${TASKTRACKER_DIR:-tn_dir}                  # /search/work/hadoop-envir/hadoop-tasktracker
+DATANODE_DIR=${DATANODE_DIR:-dn_dir}                  # /search/work/hadoop-envir/hadoop-datanode
 
 HDFS=${HDFS:-hdfs}          # /search/work/hadoop-envir/hadoop-namenode/bin/hadoop or hdfs
 MR=${MR:-yarn}              # /search/work/hadoop-envir/hadoop-jobtracker/bin/hadoop or yarn

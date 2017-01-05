@@ -39,7 +39,7 @@ PUB_KEY_FILE="$SSH_KEY_DIR/$PUB_KEY_FILENAME"
 JDK_DIR='/usr/local/jdk'
 
 SSH_SH=$SCRIPTS_DIR/ssh.sh
-SERVER_IP=${SERVER_IP:-$(ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp' | head -n 1)}
+SERVER_IP=${SERVER_IP:-$(/sbin/ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp' | head -n 1)}
 COMMAND=''
 
 # mk_keys
