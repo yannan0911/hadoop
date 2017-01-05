@@ -1,0 +1,28 @@
+WORK_DIR=${WORK_DIR:-$SCRIPTS_DIR/..}
+SCRIPTS_DIR=${SCRIPTS_DIR:-$WORK_DIR/scripts}
+CONF_DIR=${CONF_DIR:-$WORK_DIR/conf}
+DATA_DIR=${DATA_DIR:-$WORK_DIR/data}
+INPUT_DIR=${INPUT_DIR:-$WORK_DIR/input}
+OUTPUT_DIR=${OUTPUT_DIR:-$WORK_DIR/output}
+TMP_DIR=${TMP_DIR:-$WORK_DIR/tmp}
+LOG_DIR=${LOG_DIR:-$WORK_DIR/logs}
+
+mkdir -p $WORK_DIR $SCRIPTS_DIR $CONF_DIR $DATA_DIR $INPUT_DIR $OUTPUT_DIR $TMP_DIR $LOG_DIR
+
+SMSHEAD='Platform/hadoop/proc'
+#PLATFORM='maserati'
+#NAMENODE='maserati.hadoop.platform.sogou'
+#JOBTRACKER='maserati.hadoop.jt.sogou'
+PLATFORM_LIST=platform_list
+PLATFORM_LIST_FILE=$INPUT_DIR/$PLATFORM_LIST
+REMOTE_BACKUP_DIR='/search/work/op/Ambari/scripts/flow/backup_server/backup_data/'
+LOCAL_BACKUP_DIR='backup'
+DONE='done'
+BACKUP_TIME=$(date -d '1 hours ago' +%Y%m%d%H)
+DEL_TIME=$(date -d '2 days ago' +%Y%m%d)
+NOW_HOUR=$(date +%k)
+SENDSMS='/opt/monitor/sendsms.sh'
+ERROR_MESSAGE=''
+MESSAGE=''
+
+. $SCRIPTS_DIR/func.sh
