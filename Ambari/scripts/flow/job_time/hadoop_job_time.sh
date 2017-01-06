@@ -134,13 +134,13 @@ awk -F'\t' '{
         if(job_name_mapnum[$9]==0 && $10 > '$JOB_TIME_THRESHOLD_MAPNUM')
         {
             print $0
-            system("echo \"'$MR'\" job -kill "$5" >> hadoop_jobtime.log")
+            system("\"'$MR'\" job -kill "$5)
             system("sh '$MAIL_TOOL' -t '$ADMIN_MAIL' -c \"'$HADOOP_PLATFORM' TTTTTT kill BIGMAP job "$9"\" > /dev/null")
         }
         if($7 > '$JOB_TIME_THRESHOLD_OFFSET_SECOND' || job_black[$9]==1)
         {
             print $0
-            system("echo \"'$MR'\" job -kill "$5" >> hadoop_jobtime.log")
+            system("\"'$MR'\" job -kill "$5)
             system("sh '$MAIL_TOOL' -t '$ADMIN_MAIL' -c \"'$HADOOP_PLATFORM' TTTTTT kill too long job "$9"\" > /dev/null")
             if(job_black[$9]!=1)
             {
@@ -154,7 +154,7 @@ awk -F'\t' '{
                 if(job_user[$8]==0 && job_name[$9]==0)
                 {
                     print $0
-                    system("echo \"'$MR'\" job -kill "$5" >> hadoop_jobtime.log")
+                    system("\"'$MR'\" job -kill "$5)
                     system("sh '$MAIL_TOOL' -t '$ADMIN_MAIL' -c \"'$HADOOP_PLATFORM' TTTTTT job ::"$9":: is not in white_list,killed\" > /dev/null")
                 }
             }
@@ -174,4 +174,4 @@ rm -rf $SCRIPT_JOB_TIME_DIR/logs/$DEL_YMD_DIR
 rm -f temp_wget_mail
 
 # 守护进程模式
-sh hadoop_jobtime.sh >> hadoop_jobtime.log 2>&1 &
+sh hadoop_job_time.sh >> logs/hadoop_job_time.log 2>&1 &
