@@ -10,7 +10,7 @@ cd $EDITS_FILE_DIR
 ls -l edits* | \
   awk '{
     if($5>'$EDITS_FILE_SIZE_THRESHOLD') {
-      system("sh /opt/mail/sendmail.sh -t '$ADMIN_MAIL' -s \"[Hadoop_Report] "$NF" "($5-($5%(1024*1024)))/1024/1024"MB\" -c \" \" > /dev/null")
+      system("sh '$MAIL_TOOL' -t '$ADMIN_MAIL' -s \"[Hadoop_Report] '$HADOOP_PLATFORM' "$NF" "($5-($5%(1024*1024)))/1024/1024"MB\" -c \" \" > /dev/null")
     }
   }'
 cd - > /dev/null 2>&1
