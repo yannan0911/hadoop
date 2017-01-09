@@ -3,6 +3,9 @@ SCRIPT_FLOW_DIR=${SCRIPT_FLOW_DIR:-`pwd`}
 SCRIPTS_DIR=${SCRIPTS_DIR:-$SCRIPT_FLOW_DIR/..}
 . ../../conf/conf
 
+echo
+print_time_tag
+
 $HDFS dfsadmin -report > $DFSADMIN_REPORT_TMP
 if [ -s $DEAD_DN_LIST_TMP ]
 then
