@@ -1,7 +1,5 @@
-ADMIN_MAIL="urname@sogou-inc.com"
-
 HADOOP_PLATFORM=''
-HADOOP_CENTER_PUBKEY='ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzz0XB9x1JWpacdzqoyqoHk9MI915+QslSbf5lt8LTy4S/dGeaHxpBctbjisGWHpS6KR4KNjvEbzq1ww0TWYUP6C7ib5k3NvnA4ERpuG1DzGXU1QCia3wndT6eOF+Yy0Eot6I4DHVPGN8kY9qikm2kRop5KZwOK/hWwTXp/ir+Gvdo0owfHipOZ5jv6XtUgOlcMcI/A+7iEphM6bMafoFHTkPQ6R80UTZfZH2ACTzSEil8EiaexZTJw+LXi8AQc7rcutax4JcUNMVuzWoFHHKYwRIoHzPvngN3bT/1WRUke5HzMcpI9Z2gjyzhEsAiYryg/UPlEARYPMsgpLpJUNLYQ== root@adtech-zabbix-server01'
+ADMIN_MAIL="urname@sogou-inc.com"
 
 AMBARI_USER=admin
 AMBARI_PASSWD=admin
@@ -18,5 +16,3 @@ DATANODE_DIR=${DATANODE_DIR:-dn_dir}                  # /search/work/hadoop-envi
 
 HDFS=${HDFS:-hdfs}          # /search/work/hadoop-envir/hadoop-namenode/bin/hadoop or hdfs
 MR=${MR:-yarn}              # /search/work/hadoop-envir/hadoop-jobtracker/bin/hadoop or yarn
-
-MAIL_TOOL=${MAIL_TOOL:-sendmail}      # /opt/mail/sendmail.sh

@@ -11,8 +11,13 @@ TMP_DIR=${TMP_DIR:-$WORK_DIR/tmp}
 TMP_FLOW_DIR=${TMP_FLOW_DIR:-$TMP_DIR/flow}
 LOG_DIR=${LOG_DIR:-$WORK_DIR/logs}
 
-. $CONF_DIR/conf_special
 mkdir -p $DATA_DIR $INPUT_DIR $OUTPUT_DIR $TMP_FLOW_DIR $LOG_DIR
+
+. $CONF_DIR/conf_special
+# TODO: 增加配置文件及数据文件校对流程
+PLATFORM_TYPE=$(awk '/^## (1|2) ## '$HADOOP_PLATFORM'/{print $2}' $HOSTS_INPUT)
+HADOOP_CENTER_PUBKEY='ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzz0XB9x1JWpacdzqoyqoHk9MI915+QslSbf5lt8LTy4S/dGeaHxpBctbjisGWHpS6KR4KNjvEbzq1ww0TWYUP6C7ib5k3NvnA4ERpuG1DzGXU1QCia3wndT6eOF+Yy0Eot6I4DHVPGN8kY9qikm2kRop5KZwOK/hWwTXp/ir+Gvdo0owfHipOZ5jv6XtUgOlcMcI/A+7iEphM6bMafoFHTkPQ6R80UTZfZH2ACTzSEil8EiaexZTJw+LXi8AQc7rcutax4JcUNMVuzWoFHHKYwRIoHzPvngN3bT/1WRUke5HzMcpI9Z2gjyzhEsAiYryg/UPlEARYPMsgpLpJUNLYQ== root@adtech-zabbix-server01'
+MAIL_TOOL=${MAIL_TOOL:-sendmail}      # /opt/mail/sendmail.sh
 
 SEC1970=${SEC1970:-$(date +%s)}
 
