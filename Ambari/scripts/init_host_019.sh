@@ -55,7 +55,9 @@ COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILEN
          chown -R work:work /search/work;
          chown -R work:work /search/ted/hadoop/work;
          if [ -L /usr/bin/python ];then rm -f /usr/bin/python;else mv /usr/bin/python /usr/bin/python.old.$SEC1970;fi;
-         ln -s /search/python/bin/python /usr/bin/python"
+         ln -s /search/python/bin/python /usr/bin/python;
+         if [ -z \"\$(grep start-tasktracker.sh /etc/rc.local)\" ];then echo 'sudo -u work /search/work/hadoop-envir/hadoop-tasktracker/bin/start-tasktracker.sh' >> /etc/rc.local;fi;
+         if [ -z \"\$(grep start-datanode.sh /etc/rc.local)\" ];then echo 'sudo -u work /search/work/hadoop-envir/hadoop-datanode/bin/start-datanode.sh' >> /etc/rc.local;fi;"
 . $SSH_SH "$COMMAND" $NEW_LIST_INPUT
 
 # 所有节点: 更新 /etc/hosts 文件;
