@@ -6,7 +6,7 @@ SCRIPTS_DIR=${SCRIPTS_DIR:-$SCRIPT_FLOW_DIR/..}
 echo
 print_time_tag
 
-$HDFS dfsadmin -report > $DFSADMIN_REPORT_TMP
+$HADOOP dfsadmin -report > $DFSADMIN_REPORT_TMP
 if [ -s $DEAD_DN_LIST_TMP ]
 then
   cp -a $DEAD_DN_LIST_TMP{,.$SEC1970}

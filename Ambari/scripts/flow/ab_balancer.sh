@@ -6,6 +6,6 @@ SCRIPTS_DIR=${SCRIPTS_DIR:-$SCRIPT_FLOW_DIR/..}
 check=$(ps aux | grep 'org.apache.hadoop.hdfs.server.balancer.Balancer$')
 if [ -z "$check" ]
 then
-  /usr/bin/kinit -kt /etc/security/keytabs/hdfs.headless.keytab hdfs
-  nohup hdfs balancer > logs/balancer.out 2>&1 &
+  sudo -u hdfs /usr/bin/kinit -kt /etc/security/keytabs/hdfs.headless.keytab hdfs
+  nohup sudo -u hdfs hdfs balancer > logs/balancer.out 2>&1 &
 fi

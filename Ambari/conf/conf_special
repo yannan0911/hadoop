@@ -20,5 +20,6 @@ NAMENODE_DIR=${NAMENODE_DIR:-nn_dir}                  # /search/work/hadoop-envi
 TASKTRACKER_DIR=${TASKTRACKER_DIR:-tn_dir}                  # /search/work/hadoop-envir/hadoop-tasktracker
 DATANODE_DIR=${DATANODE_DIR:-dn_dir}                  # /search/work/hadoop-envir/hadoop-datanode
 
+HADOOP=${HADOOP:-hadoop}    # /search/work/hadoop-envir/hadoop-namenode/bin/hadoop or /usr/bin/hadoop
 HDFS=${HDFS:-hdfs}          # /search/work/hadoop-envir/hadoop-namenode/bin/hadoop or hdfs
 MR=${MR:-yarn}              # /search/work/hadoop-envir/hadoop-jobtracker/bin/hadoop or yarn
