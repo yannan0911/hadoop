@@ -16,8 +16,10 @@ mkdir -p $DATA_DIR $INPUT_DIR $OUTPUT_DIR $TMP_FLOW_DIR $LOG_DIR
 . $CONF_DIR/conf_special
 # TODO: 增加配置文件及数据文件校对流程
 HADOOP_CENTER_PUBKEY='ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzz0XB9x1JWpacdzqoyqoHk9MI915+QslSbf5lt8LTy4S/dGeaHxpBctbjisGWHpS6KR4KNjvEbzq1ww0TWYUP6C7ib5k3NvnA4ERpuG1DzGXU1QCia3wndT6eOF+Yy0Eot6I4DHVPGN8kY9qikm2kRop5KZwOK/hWwTXp/ir+Gvdo0owfHipOZ5jv6XtUgOlcMcI/A+7iEphM6bMafoFHTkPQ6R80UTZfZH2ACTzSEil8EiaexZTJw+LXi8AQc7rcutax4JcUNMVuzWoFHHKYwRIoHzPvngN3bT/1WRUke5HzMcpI9Z2gjyzhEsAiYryg/UPlEARYPMsgpLpJUNLYQ== root@adtech-zabbix-server01'
+SERVER_IP=${SERVER_IP:-$(/sbin/ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp' | head -n 1)}
 MAIL_TOOL=${MAIL_TOOL:-/opt/mail/sendmail.sh}
-PG_DUMP=${PG_DUMP:-/usr/bin/pg_dump}
+MAIL_TITAL="[Hadoop_Report] $HADOOP_PLATFORM-$SERVER_IP"
+MAIL_CONTENT=''
 
 SEC1970=${SEC1970:-$(date +%s)}
 
@@ -44,7 +46,6 @@ PUB_KEY_FILE="$SSH_KEY_DIR/$PUB_KEY_FILENAME"
 JDK_DIR='/usr/local/jdk'
 
 SSH_SH=$SCRIPTS_DIR/ssh.sh
-SERVER_IP=${SERVER_IP:-$(/sbin/ip a | sed -rn '/scope global eth0/s/.*inet[[:blank:]]([0-9.]+)\/.*/\1/gp' | head -n 1)}
 COMMAND=''
 
 # mk_keys
@@ -68,10 +69,28 @@ DFSADMIN_REPORT_TMP=$TMP_DIR/dfsadmin_report
 DEAD_DN_LIST_TMP=$TMP_FLOW_DIR/dead_dn_list
 
 # backup_server
+PG_DUMP=${PG_DUMP:-/usr/bin/pg_dump}
+KDB5_UTIL=${KDB5_UTIL:-/usr/sbin/kdb5_util}
+
 PLATFORM_TYPE=$(awk '/^## (1|2) ## '$HADOOP_PLATFORM'/{print $2}' $HOSTS_INPUT)
 BACKUP_TIME=$(date -d"0 days ago" +"%Y%m%d%H")
 DEL_DAY=$(date -d"2 days ago" +"%Y%m%d")
 BACKUP_SERVER_DATA_DIR=${BACKUP_SERVER_DATA_DIR:-$SCRIPT_FLOW_BACKUP_SERVER_DIR/backup_data}
+KEY_WORD_AMBARI_SERVER='org.apache.ambari.server.controller.AmbariServer'
+KEY_WORD_KERBEROS='/usr/sbin/kadmind -P /var/run/kadmind.pid'
+BACKUP_FILE_TAG=${BACKUP_FILE_TAG:-backup_ambari}
+
+PG_USER_AMBARI=${PG_USER_AMBARI:-ambari}
+PG_DATABASE_AMBARI=${PG_DATABASE_AMBARI:-ambari}
+PG_USER_AMBARIRCA=${PG_USER_AMBARIRCA:-mapred}
+PG_DATABASE_AMBARIRCA=${PG_DATABASE_AMBARIRCA:-ambarirca}
+
+KRB_DUMP_FILE=${KRB_DUMP_FILE:-${BACKUP_FILE_TAG}_kerberos_dump_file}
+KRB_DUMP_FILE_OK=$KRB_DUMP_FILE.dump_ok
+SYS_VAR_DIR='/var'
+KRB_DIR_NAME=${KRB_DIR_NAME:-kerberos}
+KRB_ROOT_DIR=${KRB_ROOT_DIR:-$SYS_VAR_DIR/$KRB_DIR_NAME}
+KRB_ETC_CONF=${KRB_ETC_CONF:-/etc/krb5.conf}
 
 # check_edits
 EDITS_FILE_DIR=${EDITS_DIR:-/search/work/hadoop-envir/hadoop-data/dfs/name/current}
