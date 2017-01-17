@@ -3,6 +3,7 @@ SCRIPT_FLOW_BACKUP_SERVER_DIR=${SCRIPT_FLOW_BACKUP_SERVER_DIR:-`pwd`}
 SCRIPTS_DIR=${SCRIPTS_DIR:-$SCRIPT_FLOW_BACKUP_SERVER_DIR/../..}
 . ../../../conf/conf
 
+set -u
 echo
 print_time_tag
 BACK_DONE="$BACKUP_SERVER_DATA_DIR/$BACKUP_TIME.done"
@@ -41,6 +42,7 @@ case $PLATFORM_TYPE in
     rm -f $BACKUP_SERVER_DATA_DIR/${DEL_DAY}*.done
   ;;
   2)
+    rm -rf $TMP_DIR/${BACKUP_FILE_TAG}_*
     CHECK_TAG=0
     PS_LIST=$(ps aux | grep -E "$KEY_WORD_AMBARI_SERVER|$KEY_WORD_KERBEROS")
     CHECK=$(echo "$PS_LIST" | grep "$KEY_WORD_AMBARI_SERVER" | grep -v grep)
