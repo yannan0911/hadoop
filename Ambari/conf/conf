@@ -18,6 +18,7 @@ mkdir -p $DATA_DIR $INPUT_DIR $OUTPUT_DIR $TMP_FLOW_DIR $LOG_DIR
 PLATFORM_TYPE=$(awk '/^## (1|2) ## '$HADOOP_PLATFORM'/{print $2}' $HOSTS_INPUT)
 HADOOP_CENTER_PUBKEY='ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzz0XB9x1JWpacdzqoyqoHk9MI915+QslSbf5lt8LTy4S/dGeaHxpBctbjisGWHpS6KR4KNjvEbzq1ww0TWYUP6C7ib5k3NvnA4ERpuG1DzGXU1QCia3wndT6eOF+Yy0Eot6I4DHVPGN8kY9qikm2kRop5KZwOK/hWwTXp/ir+Gvdo0owfHipOZ5jv6XtUgOlcMcI/A+7iEphM6bMafoFHTkPQ6R80UTZfZH2ACTzSEil8EiaexZTJw+LXi8AQc7rcutax4JcUNMVuzWoFHHKYwRIoHzPvngN3bT/1WRUke5HzMcpI9Z2gjyzhEsAiYryg/UPlEARYPMsgpLpJUNLYQ== root@adtech-zabbix-server01'
 MAIL_TOOL=${MAIL_TOOL:-/opt/mail/sendmail.sh}
+PG_DUMP=${PG_DUMP:-/usr/bin/pg_dump}
 
 SEC1970=${SEC1970:-$(date +%s)}
 

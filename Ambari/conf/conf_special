@@ -7,6 +7,10 @@ AMBARI_SERVER=server_url        # rsync.landrover004.hadoop.sjs.ted
 AMBARI_PORT=8080
 AMBARI_CLUSTER=cluster_name     # LandRover
 
+# postgres
+PG_PASSWORD_AMBARI=${PG_PASSWORD_AMBARI:-bigdata}
+PG_PASSWORD_AMBARIRCA=${PG_PASSWORD_AMBARIRCA:-mapred}
+
 HADOOP_WORK_DIR=${HADOOP_WORK_DIR:-work_dir}                        # /search/work
 HADOOP_DATA_DIR=${HADOOP_DATA_DIR:-data_dir}                        # /search/work/hadoop-envir/hadoop-data
 JOBTRACKER_DIR=${JOBTRACKER_DIR:-jt_dir}              # /search/work/hadoop-envir/hadoop-jobtracker
