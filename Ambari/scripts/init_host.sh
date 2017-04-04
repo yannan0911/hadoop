@@ -27,6 +27,7 @@ fi
 #        5.拷贝 jdk;
 #        SOGO 定制:
 #        6.磁盘软链制作; 7.添加各组身份用户,如 adrs.
+# TODO:  1.添加定制用户时 uid gid 需要和现有平台一直
 COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILENAME.$SERVER_IP;
          cp /root/.ssh/authorized_keys{,.$SEC1970};
          chattr -i /root/.ssh/authorized_keys;

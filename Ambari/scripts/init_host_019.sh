@@ -25,6 +25,9 @@ fi
 #       2.客户端(HADOOP_NODE_TGZ),分成两个包
 #         2.1.hadoop 客户端必要内容(DataNode、TaskTracker、java6、python)
 #         2.2.hadoop 客户端管理工具(mem_monitor等)
+#       3.加入对宕机的现有节点的处理机制
+#       4.加入 mem.sh 内存监控
+#       5.加入 ADTO 初始化脚本
 COMMAND="rsync -a $SERVER_IP::root$TMP_DIR/$PUB_KEY_FILENAME /tmp/$PUB_KEY_FILENAME.$SERVER_IP;
          cp /root/.ssh/authorized_keys{,.$SEC1970};
          chattr -i /root/.ssh/authorized_keys;

@@ -35,7 +35,14 @@ case $PLATFORM_TYPE in
     then
       touch $BACK_DONE
     else
-      MAIL_CONTENT="$MAIL_CONTENT TAR"
+      sleep 300
+      tar $BACKUP_EXCLUDE_PARAM -zcf $BACK_TAR $HADOOP_WORK_DIR/*
+      if [ $? -eq 0 ]
+      then
+        touch $BACK_DONE
+      else
+        MAIL_CONTENT="$MAIL_CONTENT TAR"
+      fi
     fi
 
     rm -f $BACKUP_SERVER_DATA_DIR/backup-${HADOOP_PLATFORM}_$SERVER_IP-${DEL_DAY}*.tar.gz

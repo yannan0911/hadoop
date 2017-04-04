@@ -2,6 +2,7 @@
 SCRIPTS_DIR=${SCRIPTS_DIR:-`pwd`}
 . ../conf/conf
 
+# TODO: 删除公钥制作流程 避免误操作重新制作导致集群崩溃
 # public key
 HBASE_COM_KEY_FILE="$COM_KEY_OUTPUT_DIR/hbase.headless.keytab"
 if [ ! -f "$HBASE_COM_KEY_FILE" ]
